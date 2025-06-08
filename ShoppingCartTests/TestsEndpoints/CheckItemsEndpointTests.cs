@@ -1,9 +1,8 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestProject1.Constants;
 using TestProject1.Helpers;
 using TestProject1.Models;
-using TestProject1.Constants;
+using TestProject1.TestData;
 
 namespace TestProject1.ChekItemsCartEndpoint;
 
@@ -18,9 +17,16 @@ public class CheckItemsEndpointTests : BaseTest
 	}
 
 	[TestMethod]
+	public async Task GetStoreItems_InvalidRoute_ReturnsNotFound()
+	{
+		var response = await _client.GetAsync(Urls.INVALID_URL);
+		ApiResponseHelper.AssertStatusCodeNotFound(response);
+	}
+
+	[TestMethod]
 	public async Task GetStoreItems_ReturnsListOfItems()
 	{
-		var response = await _client.GetAsync("/getstoreitems");
+		var response = await _client.GetAsync(Urls.GET_STORE_ITEMS);
 		var content = await response.Content.ReadAsStringAsync();
 
 		ApiResponseHelper.AssertStatusCodeOk(response);
@@ -30,7 +36,7 @@ public class CheckItemsEndpointTests : BaseTest
 	[TestMethod]
 	public async Task GetStoreItems_ReturnsExpectedNumberOfItems()
 	{
-		var response = await _client.GetAsync("/getstoreitems");
+		var response = await _client.GetAsync(Urls.GET_STORE_ITEMS);
 		var content = await response.Content.ReadAsStringAsync();
 		var items = ApiResponseHelper.DeserializeStoreItems(content);
 
@@ -41,13 +47,34 @@ public class CheckItemsEndpointTests : BaseTest
 	[TestMethod]
 	public async Task GetStoreItems_ContainsSpecificItem()
 	{
-		var response = await _client.GetAsync("/getstoreitems");
+		var response = await _client.GetAsync(Urls.GET_STORE_ITEMS);
 		var content = await response.Content.ReadAsStringAsync();
 		var items = ApiResponseHelper.DeserializeStoreItems(content);
 
-		var expected = new StoreItemDto { Id = 1, Name = "First Item", Price = 1.0m };
+		ApiResponseHelper.AssertStatusCodeOk(response);
+		ApiResponseHelper.AssertStoreItemExists(items, StoreItems.FirstItem);
+	}
+
+	[TestMethod]
+	public async Task GetStoreItems_DoesNotContainNonExistingItem()
+	{
+		var response = await _client.GetAsync(Urls.GET_STORE_ITEMS);
+		var content = await response.Content.ReadAsStringAsync();
+		var items = ApiResponseHelper.DeserializeStoreItems(content);
 
 		ApiResponseHelper.AssertStatusCodeOk(response);
-		ApiResponseHelper.AssertStoreItemExists(items, expected);
+		ApiResponseHelper.AssertStoreItemIsNonExisting(items, StoreItems.NonExistingItem);
 	}
+
+	[TestMethod]
+	public async Task GetStoreItems_EachItemHasRequiredFields()
+	{
+		var response = await _client.GetAsync(Urls.GET_STORE_ITEMS);
+		var content = await response.Content.ReadAsStringAsync();
+		var items = ApiResponseHelper.DeserializeStoreItems(content);
+
+		ApiResponseHelper.AssertStatusCodeOk(response);
+		ApiResponseHelper.AssertEachItemHasRequiredFields(items);
+	}
+
 }
