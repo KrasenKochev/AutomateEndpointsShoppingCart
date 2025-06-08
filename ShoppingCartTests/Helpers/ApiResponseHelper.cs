@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject1.Models;
+using TestProject1.Models.CartItemDto;
+using TestProject1.Models.StoreItemDto;
 
 namespace TestProject1.Helpers;
 
@@ -30,6 +31,13 @@ public static class ApiResponseHelper
         {
             PropertyNameCaseInsensitive = true
         });
+    }
+    public static List<CartItemDto> DeserializeCartItems(string content)
+    {
+        return JsonSerializer.Deserialize<List<CartItemDto>>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        }) ?? new();
     }
     public static void AssertStoreItemExists(List<StoreItemDto>? items, StoreItemDto expected)
     {
