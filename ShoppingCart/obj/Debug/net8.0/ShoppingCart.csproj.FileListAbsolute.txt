@@ -31,3 +31,4 @@
 /home/kochev/Documents/AscendJobTask/ShoppingCart/obj/Debug/net8.0/ShoppingCart.pdb
 /home/kochev/Documents/AscendJobTask/ShoppingCart/obj/Debug/net8.0/ShoppingCart.genruntimeconfig.cache
 /home/kochev/Documents/AscendJobTask/ShoppingCart/obj/Debug/net8.0/ref/ShoppingCart.dll
+/home/kochev/Documents/AscendJobTask/ShoppingCart/obj/Debug/net8.0/ShoppingCart.sourcelink.json

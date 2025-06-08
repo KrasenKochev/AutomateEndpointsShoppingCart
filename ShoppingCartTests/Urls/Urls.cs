@@ -11,11 +11,7 @@ public static class Urls
     public static string GetAddItemToCartUrl(string id, string amount) =>
     $"{ADD_ITEM_TO_CART_PREFIX}/{id}/{amount}";
 
-    public static string GetAddItemToCartUrlString(string id, int amount) =>
-   $"{ADD_ITEM_TO_CART_PREFIX}/{id}/{amount}";
-
-    public static string GetAddItemToCartUrlLong(long id, int amount) =>
-   $"{ADD_ITEM_TO_CART_PREFIX}/{id}/{amount}";
+    public static string COMPLETE_ORDER_PREFIX => "completeorder";
 
 
 }
