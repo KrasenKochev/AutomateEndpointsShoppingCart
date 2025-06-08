@@ -26,6 +26,7 @@ namespace TestProject1.Tests
             var response = await _client.PostAsync(url, null);
 
             ApiResponseHelper.AssertStatusCodeBadRequest(response);
+            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.ITEM_DOES_NOT_EXIST);
         }
 
 

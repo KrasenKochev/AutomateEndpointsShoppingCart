@@ -70,5 +70,10 @@ public static class ApiResponseHelper
             Assert.IsTrue(item.Price > 0, $"Item Price should be greater than 0. Found: {item.Price}");
         }
     }
+    public static async Task AssertErrorMessageAsync(HttpResponseMessage response, string expectedMessage)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.AreEqual(expectedMessage, content.Trim(), "Unexpected error message returned from the API.");
+    }
 
 }
