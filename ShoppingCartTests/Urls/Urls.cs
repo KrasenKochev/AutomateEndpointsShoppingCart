@@ -8,7 +8,7 @@ public static class Urls
 
     public static string ADD_ITEM_TO_CART_PREFIX => "additemtocart";
 
-    public static string GetAddItemToCartUrl(int id, int amount) =>
+    public static string GetAddItemToCartUrl(string id, string amount) =>
     $"{ADD_ITEM_TO_CART_PREFIX}/{id}/{amount}";
 
     public static string GetAddItemToCartUrlString(string id, int amount) =>
