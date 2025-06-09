@@ -104,5 +104,12 @@ public static class ApiResponseHelper
         Assert.IsNotNull(item, $"Expected item with ID {expectedItemId} to still be present in the cart.");
         Assert.AreEqual(expectedQuantity, item.Quantity, $"Item ID {expectedItemId} quantity did not match expected.");
     }
+    public static void AssertCartContainsItem(List<CartItemDto> cartItems, int itemId, int expectedQuantity, decimal itemPrice)
+    {
+        var actualItem = cartItems.FirstOrDefault(i => i.Id == itemId);
+        Assert.IsNotNull(actualItem, $"Expected item with ID {itemId} to be present in the cart.");
+        Assert.AreEqual(expectedQuantity, actualItem.Quantity, "Item quantity does not match.");
+        Assert.AreEqual(itemPrice * expectedQuantity, actualItem.TotalPrice, "Total price does not match.");
+    }
 
 }

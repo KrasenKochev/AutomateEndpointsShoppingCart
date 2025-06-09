@@ -20,7 +20,6 @@ namespace TestProject1.Tests
             catch { }
         }
         [TestMethod]
-
         public async Task GetCartItems_EmptyCart_ReturnsMessage()
         {
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
@@ -29,7 +28,6 @@ namespace TestProject1.Tests
         }
 
         [TestMethod]
-
         public async Task GetCartItems_SingleItem_ReturnsCorrectData()
         {
             var expectedItem = StoreItems.FirstItem;
@@ -38,14 +36,14 @@ namespace TestProject1.Tests
             await CartHelper.AddItemToCartAsync(_client, expectedItem.Id, quantity);
 
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
-            var content = await response.Content.ReadAsStringAsync();
-            var cartItems = ApiResponseHelper.DeserializeCartItems(content);
+            ApiResponseHelper.AssertStatusCodeOk(response);
 
-            var actualItem = cartItems.FirstOrDefault(i => i.Id == expectedItem.Id);
-            Assert.IsNotNull(actualItem);
-            Assert.AreEqual(quantity, actualItem.Quantity);
-            Assert.AreEqual(expectedItem.Price * quantity, actualItem.TotalPrice);
+            var cartContent = await response.Content.ReadAsStringAsync();
+            var cartItems = ApiResponseHelper.DeserializeCartItems(cartContent);
+
+            ApiResponseHelper.AssertCartContainsItem(cartItems, expectedItem.Id, quantity, expectedItem.Price);
         }
+
 
 
         [TestMethod]
@@ -61,20 +59,14 @@ namespace TestProject1.Tests
             await CartHelper.AddItemToCartAsync(_client, secondItem.Id, secondQuantity);
 
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
-            var content = await response.Content.ReadAsStringAsync();
-            var cartItems = ApiResponseHelper.DeserializeCartItems(content);
+            ApiResponseHelper.AssertStatusCodeOk(response);
 
-            var actualFirstItem = cartItems.FirstOrDefault(i => i.Id == firstItem.Id);
-            Assert.IsNotNull(actualFirstItem);
-            Assert.AreEqual(firstQuantity, actualFirstItem.Quantity);
-            Assert.AreEqual(firstItem.Price * firstQuantity, actualFirstItem.TotalPrice);
+            var cartContent = await response.Content.ReadAsStringAsync();
+            var cartItems = ApiResponseHelper.DeserializeCartItems(cartContent);
 
-            var actualSecondItem = cartItems.FirstOrDefault(i => i.Id == secondItem.Id);
-            Assert.IsNotNull(actualSecondItem);
-            Assert.AreEqual(secondQuantity, actualSecondItem.Quantity);
-            Assert.AreEqual(secondItem.Price * secondQuantity, actualSecondItem.TotalPrice);
+            ApiResponseHelper.AssertCartContainsItem(cartItems, firstItem.Id, firstQuantity, firstItem.Price);
+            ApiResponseHelper.AssertCartContainsItem(cartItems, secondItem.Id, secondQuantity, secondItem.Price);
         }
-
 
 
     }
