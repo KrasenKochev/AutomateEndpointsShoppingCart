@@ -86,4 +86,23 @@ public static class ApiResponseHelper
         Assert.AreEqual(expectedQuantity, item.Quantity, $"Expected quantity {expectedQuantity}, but got {item?.Quantity ?? -1}.");
     }
 
+    public static async void AssertContentContainsMessage(HttpResponseMessage response, string expectedMessage)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        StringAssert.Contains(content, expectedMessage, "Response did not contain the expected message.");
+    }
+
+    public static async void AssertContentEquals(HttpResponseMessage response, string expectedContent)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.AreEqual(expectedContent, content, "Response content did not match expected.");
+    }
+
+    public static void AssertCartItemQuantity(List<CartItemDto> cartItems, int expectedItemId, int expectedQuantity)
+    {
+        var item = cartItems.FirstOrDefault(ci => ci.Id == expectedItemId);
+        Assert.IsNotNull(item, $"Expected item with ID {expectedItemId} to still be present in the cart.");
+        Assert.AreEqual(expectedQuantity, item.Quantity, $"Item ID {expectedItemId} quantity did not match expected.");
+    }
+
 }

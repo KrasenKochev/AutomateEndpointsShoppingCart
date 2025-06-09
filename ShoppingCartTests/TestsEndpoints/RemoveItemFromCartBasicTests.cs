@@ -25,36 +25,43 @@ namespace TestProject1.Tests
         {
             var itemID = StoreItems.FirstItem.Id;
             var quantity = 1;
+            var itemName = StoreItems.FirstItem.Name;
+            var expectedMessage = $"One quantity of item '{itemName}' removed from the cart. Item '{itemName}' completely removed.";
 
             await CartHelper.AddItemToCartAsync(_client, itemID, quantity);
 
             var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(itemID.ToString()), null);
             ApiResponseHelper.AssertStatusCodeOk(response);
+            ApiResponseHelper.AssertContentContainsMessage(response, expectedMessage);
 
             var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
-            var cartItems = ApiResponseHelper.DeserializeCartItems(await cartResponse.Content.ReadAsStringAsync());
-
-            Assert.IsFalse(cartItems.Any(ci => ci.Id == itemID));
+            ApiResponseHelper.AssertContentEquals(cartResponse, "Shopping cart is empty.");
         }
 
         [TestMethod]
         public async Task RemoveItemFromCart_MultipleQuantityItem_DecrementsQuantity()
         {
-            var itemID = StoreItems.FirstItem.Id;
-            var quantity = 3;
-            var actualQuantity = quantity - 1;
+            var item = StoreItems.FirstItem;
+            var initialQuantity = 2;
+            var expectedQuantity = initialQuantity - 1;
 
-            await CartHelper.AddItemToCartAsync(_client, itemID, quantity);
+            var expectedMessage =
+                $"One quantity of item '{item.Name}' removed from the cart. Remaining quantity: {expectedQuantity}, Price per item: ${item.Price:0.00}, Total price for this item: ${(item.Price * expectedQuantity):0.00}";
 
-            var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(itemID.ToString()), null);
+            await CartHelper.AddItemToCartAsync(_client, item.Id, initialQuantity);
+
+            var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(item.Id.ToString()), null);
             ApiResponseHelper.AssertStatusCodeOk(response);
+            ApiResponseHelper.AssertContentContainsMessage(response, expectedMessage);
 
-            var cartItems = ApiResponseHelper.DeserializeCartItems(await (await _client.GetAsync(Urls.GET_CART_ITEMS)).Content.ReadAsStringAsync());
-            var actualItem = cartItems.FirstOrDefault(ci => ci.Id == itemID);
+            var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
+            var cartContent = await cartResponse.Content.ReadAsStringAsync();
+            var cartItems = ApiResponseHelper.DeserializeCartItems(cartContent);
 
-            Assert.IsNotNull(actualItem);
-            Assert.AreEqual(actualQuantity, actualItem.Quantity);
+            ApiResponseHelper.AssertCartItemQuantity(cartItems, item.Id, expectedQuantity);
         }
+
+
 
         [TestMethod]
         public async Task RemoveItemFromCart_ItemNotInCart_ReturnsBadRequest()

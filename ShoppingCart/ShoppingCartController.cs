@@ -93,11 +93,12 @@ public class ShoppingCartController : Controller
 	[Route("removeitemfromcart/{id:int}")]
 	public IActionResult RemoveItemFromCart(int id)
 	{
-		if (!ShoppingCart.ContainsKey(id))
-			return BadRequest("Item is not in the cart.");
 
 		if (!StoreItems.ContainsKey(id))
 			return BadRequest("Item information not found in store.");
+
+		if (!ShoppingCart.ContainsKey(id))
+			return BadRequest("Item is not in the cart.");
 
 		var item = StoreItems[id];
 
