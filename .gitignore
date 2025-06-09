@@ -1,0 +1,39 @@
+# Build results
+bin/
+obj/
+TestResults/
+*.trx
+*.coverage
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE folders
+.vscode/
+.idea/
+
+# Mac/Linux files
+.DS_Store
+*.swp
+*~
+
+# Windows files
+Thumbs.db
+desktop.ini
+
+# Rider
+*.DotSettings.user
+
+# Report output
+TestReport/
+
+# Dotnet tool manifest (optional, include if local tools are used)
+# .config/
+
+# Secrets (if any, adjust accordingly)
+secrets.json
+
