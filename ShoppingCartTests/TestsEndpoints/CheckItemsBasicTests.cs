@@ -10,6 +10,16 @@ namespace TestProject1.ChekItemsCartEndpoint;
 [TestCategory("Basic")]
 public class CheckItemsEndpointTests : BaseTest
 {
+	[TestInitialize]
+	public async Task TestInitialize()
+	{
+		try
+		{
+			await CartHelper.CompleteOrderAsync(_client);
+		}
+		catch { }
+	}
+
 	[TestMethod]
 	public async Task GetStoreItems_ReturnsStatusCodeOk()
 	{

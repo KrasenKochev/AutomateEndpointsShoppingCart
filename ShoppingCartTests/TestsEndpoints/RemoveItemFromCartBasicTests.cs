@@ -10,6 +10,16 @@ namespace TestProject1.Tests
     [TestCategory("Basic")]
     public class RemoveItemCartEndpointTests : BaseTest
     {
+        [TestInitialize]
+        public async Task TestInitialize()
+        {
+            try
+            {
+                await CartHelper.CompleteOrderAsync(_client);
+            }
+            catch { }
+        }
+
         [TestMethod]
         public async Task RemoveItemFromCart_SingleQuantityItem_RemovesItemCompletely()
         {
@@ -26,6 +36,7 @@ namespace TestProject1.Tests
 
             Assert.IsFalse(cartItems.Any(ci => ci.Id == itemID));
         }
+
         [TestMethod]
         public async Task RemoveItemFromCart_MultipleQuantityItem_DecrementsQuantity()
         {

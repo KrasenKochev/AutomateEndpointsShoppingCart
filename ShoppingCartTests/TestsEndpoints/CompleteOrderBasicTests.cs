@@ -7,10 +7,20 @@ using TestProject1.TestData;
 namespace TestProject1.Tests
 {
     [TestClass]
+
+
     [TestCategory("Basic")]
     public class CompleteOrderEndpointTests : BaseTest
     {
-
+        [TestInitialize]
+        public async Task TestInitialize()
+        {
+            try
+            {
+                await CartHelper.CompleteOrderAsync(_client);
+            }
+            catch { }
+        }
 
         [TestMethod]
         public async Task CompleteOrder_ItemsInCart_ReturnsOk()

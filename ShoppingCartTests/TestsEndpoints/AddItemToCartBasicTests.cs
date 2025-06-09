@@ -10,6 +10,15 @@ namespace TestProject1.Tests
     [TestCategory("Basic")]
     public class AddItemToCartEndpointTests : BaseTest
     {
+        [TestInitialize]
+        public async Task TestInitialize()
+        {
+            try
+            {
+                await CartHelper.CompleteOrderAsync(_client);
+            }
+            catch { }
+        }
 
         [TestMethod]
         public async Task AddItemToCart_WithValidItemAndQuantity_ReturnsOk()

@@ -80,5 +80,10 @@ public static class ApiResponseHelper
         Assert.IsNotNull(items, "Expected store items list to be not null.");
         Assert.IsTrue(items.Count > 0, "Expected non-empty list of store items.");
     }
+    public static void AssertCartItemQuantity(CartItemDto? item, int expectedQuantity)
+    {
+        Assert.IsNotNull(item, "Expected item to be present in the cart.");
+        Assert.AreEqual(expectedQuantity, item.Quantity, $"Expected quantity {expectedQuantity}, but got {item?.Quantity ?? -1}.");
+    }
 
 }
