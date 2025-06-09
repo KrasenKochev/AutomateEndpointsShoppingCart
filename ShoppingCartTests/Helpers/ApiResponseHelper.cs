@@ -30,7 +30,7 @@ public static class ApiResponseHelper
         return JsonSerializer.Deserialize<List<StoreItemDto>>(content, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
-        });
+        }) ?? new();
     }
     public static List<CartItemDto> DeserializeCartItems(string content)
     {

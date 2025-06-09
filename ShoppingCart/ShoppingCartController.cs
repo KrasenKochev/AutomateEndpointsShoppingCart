@@ -74,12 +74,15 @@ public class ShoppingCartController : Controller
 		var items = ShoppingCart.Select(entry =>
 		{
 			var storeItem = StoreItems.GetValueOrDefault(entry.Key);
+			var price = storeItem?.Price ?? 0;
+
 			return new
 			{
 				Id = entry.Key,
 				Name = storeItem?.Name ?? "Unknown",
-				Price = storeItem?.Price ?? 0,
-				Quantity = entry.Value
+				PricePerProduct = price,
+				Quantity = entry.Value,
+				TotalPrice = price * entry.Value
 			};
 		});
 
