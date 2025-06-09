@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject1.Models;
 using TestProject1.Constants;
+using TestProject1.Models;
+using TestProject1.TestData;
 
 namespace TestProject1.Helpers;
 
@@ -74,6 +75,12 @@ public static class ApiResponseHelper
 
         Assert.IsNotNull(match, $"Expected item '{expected.Name}' with quantity {expectedQuantity} was not found in the cart.");
     }
+    public static void AssertCartItemDoesNotExist(List<CartItemDto>? items, int itemId)
+    {
+        Assert.IsNotNull(items, "Deserialized cart item list is null.");
+        var item = items.FirstOrDefault(i => i.Id == itemId);
+        Assert.IsNull(item, $"Item with ID {itemId} was not expected in the cart but was found.");
+    }
 
     public static void AssertEachItemHasRequiredFields(List<StoreItemDto>? items)
     {
@@ -131,6 +138,11 @@ public static class ApiResponseHelper
     {
         Assert.IsNotNull(items, "Item list was null.");
         Assert.AreEqual(expectedCount, items.Count, $"Expected {expectedCount} items but got {items.Count}.");
+    }
+    public static void AssertExpectedStoreItemCount(List<StoreItemDto>? items)
+    {
+        Assert.IsNotNull(items, "Deserialized store item list is null.");
+        Assert.AreEqual(StoreItems.AllItems.Count, items.Count, "Store item count does not match expected.");
     }
 
 
