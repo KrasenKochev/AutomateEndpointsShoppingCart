@@ -15,5 +15,9 @@ public static class Urls
 
     public static string GET_CART_ITEMS => "getcartitems";
 
+    public static string REMOVE_ITEM_FROM_CART_PREFIX => "removeitemfromcart";
+
+    public static string PostRemoveItemFromCartUrl(string id) =>
+    $"{REMOVE_ITEM_FROM_CART_PREFIX}/{id}";
 
 }

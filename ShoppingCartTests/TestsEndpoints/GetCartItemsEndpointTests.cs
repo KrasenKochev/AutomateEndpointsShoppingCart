@@ -10,7 +10,7 @@ namespace TestProject1.Tests
     public class GetCartItemsEndpointTests : BaseTest
     {
         [TestMethod]
-        public async Task GetCartItems_EmptyCart_ReturnsEmptyMessage()
+        public async Task GetCartItems_EmptyCart_ReturnsMessage()
         {
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
             ApiResponseHelper.AssertStatusCodeOk(response);
@@ -23,9 +23,7 @@ namespace TestProject1.Tests
             var expectedItem = StoreItems.FirstItem;
             var quantity = 2;
 
-            await _client.PostAsync(
-                Urls.PostAddItemToCartUrl(expectedItem.Id.ToString(), quantity.ToString()),
-                new StringContent(""));
+            await CartHelper.AddItemToCartAsync(_client, expectedItem.Id, quantity);
 
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
             var content = await response.Content.ReadAsStringAsync();
@@ -47,8 +45,8 @@ namespace TestProject1.Tests
             var firstQuantity = 2;
             var secondQuantity = 3;
 
-            await _client.PostAsync(Urls.PostAddItemToCartUrl(firstItem.Id.ToString(), firstQuantity.ToString()), new StringContent(""));
-            await _client.PostAsync(Urls.PostAddItemToCartUrl(secondItem.Id.ToString(), secondQuantity.ToString()), new StringContent(""));
+            await CartHelper.AddItemToCartAsync(_client, firstItem.Id, firstQuantity);
+            await CartHelper.AddItemToCartAsync(_client, secondItem.Id, secondQuantity);
 
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
             var content = await response.Content.ReadAsStringAsync();
@@ -64,6 +62,7 @@ namespace TestProject1.Tests
             Assert.AreEqual(secondQuantity, actualSecondItem.Quantity);
             Assert.AreEqual(secondItem.Price * secondQuantity, actualSecondItem.TotalPrice);
         }
+
 
 
     }
