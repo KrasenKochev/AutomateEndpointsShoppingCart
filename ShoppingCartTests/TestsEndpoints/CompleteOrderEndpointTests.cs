@@ -14,7 +14,7 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task CompleteOrder_ItemsInCart_ReturnsOk()
         {
-            var addToCartUrl = Urls.GetAddItemToCartUrl(ItemsProperties.StoreItemId, ItemsProperties.StoreItemQuantity);
+            var addToCartUrl = Urls.PostAddItemToCartUrl(ItemsProperties.StoreItemId, ItemsProperties.StoreItemQuantity);
             var AddItemToCartResponse = await _client.PostAsync(addToCartUrl, null);
 
             ApiResponseHelper.AssertStatusCodeOk(AddItemToCartResponse);
@@ -31,7 +31,7 @@ namespace TestProject1.Tests
 
             ApiResponseHelper.AssertStatusCodeBadRequest(response);
 
-            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.SHOPPING_CART_IS_EMPTY);
+            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.SHOPPING_CART_IS_EMPTY_COMPLETE_ORDER);
         }
 
     }

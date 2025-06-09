@@ -11,6 +11,13 @@ public static class StoreItems
         Price = 1.0m
     };
 
+    public static StoreItemDto SecondItem => new()
+    {
+        Id = 2,
+        Name = "Second Item",
+        Price = 2.0m
+    };
+
     public static StoreItemDto NonExistingItem => new()
     {
         Id = 13,
@@ -18,6 +25,11 @@ public static class StoreItems
         Price = 13.13m
     };
 
+    public static List<StoreItemDto> AllItems => new()
+    {
+        FirstItem,
+        SecondItem,
+        NonExistingItem
 
-
+    };
 }

@@ -13,7 +13,11 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task AddItemToCart_WithValidItemAndQuantity_ReturnsOk()
         {
-            var url = Urls.GetAddItemToCartUrl(ItemsProperties.StoreItemId, ItemsProperties.StoreItemQuantity);
+
+            var StoreItemId = StoreItems.FirstItem.Id;
+            var expectedQuantity = "1";
+
+            var url = Urls.PostAddItemToCartUrl(StoreItemId.ToString(), expectedQuantity);
             var response = await _client.PostAsync(url, null);
 
             ApiResponseHelper.AssertStatusCodeOk(response);
@@ -22,7 +26,10 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task AddItemToCart_WithNonExistingId_ReturnsBadRequest()
         {
-            var url = Urls.GetAddItemToCartUrl(ItemsProperties.StoreItemIdNonExisting, ItemsProperties.StoreItemQuantity);
+            var StoreItemId = StoreItems.NonExistingItem.Id;
+            var Quantity = "1";
+
+            var url = Urls.PostAddItemToCartUrl(StoreItemId.ToString(), Quantity);
             var response = await _client.PostAsync(url, null);
 
             ApiResponseHelper.AssertStatusCodeBadRequest(response);
@@ -33,7 +40,10 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task AddItemToCart_WithNegativeAmount_ReturnsOk()
         {
-            var url = Urls.GetAddItemToCartUrl(ItemsProperties.StoreItemId, ItemsProperties.StoreItemQuantityNegativeAmount);
+            var StoreItemId = StoreItems.FirstItem.Id;
+            var negativeQuantity = "-1";
+
+            var url = Urls.PostAddItemToCartUrl(StoreItemId.ToString(), negativeQuantity);
             var response = await _client.PostAsync(url, null);
 
             ApiResponseHelper.AssertStatusCodeOk(response);
@@ -49,7 +59,11 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task AddItemToCart_WithStringId_ReturnsNonFound()
         {
-            var url = Urls.GetAddItemToCartUrl(ItemsProperties.StoreItemIdInvalidSymbol, ItemsProperties.StoreItemQuantityNegativeAmount);
+
+            var StoreItemIdString = "errror&";
+            var Quantity = "1";
+
+            var url = Urls.PostAddItemToCartUrl(StoreItemIdString, Quantity);
             var response = await _client.PostAsync(url, null);
 
             ApiResponseHelper.AssertStatusCodeNotFound(response);
@@ -58,7 +72,10 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task AddItemToCart_WithValidItemAndLargeQuantity_ReturnsNonFound()
         {
-            var url = Urls.GetAddItemToCartUrl(ItemsProperties.StoreItemQuantityLarge, ItemsProperties.StoreItemQuantityNegativeAmount);
+            var StoreItemId = StoreItems.SecondItem.Id;
+            var Quantity = "9999999999";
+
+            var url = Urls.PostAddItemToCartUrl(StoreItemId.ToString(), Quantity);
             var response = await _client.PostAsync(url, null);
 
             ApiResponseHelper.AssertStatusCodeNotFound(response);
