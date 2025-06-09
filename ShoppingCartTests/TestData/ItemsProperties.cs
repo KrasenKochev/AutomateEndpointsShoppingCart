@@ -1,8 +1,7 @@
-namespace TestProject1.TestData;
-
-using TestProject1.Models.StoreItemDto;
-using TestProject1.Models.CartItemDto;
+using TestProject1.Models;
 using TestProject1.ChekItemsCartEndpoint;
+
+namespace TestProject1.TestData;
 
 public static class ItemsProperties
 {

@@ -7,6 +7,7 @@ using TestProject1.TestData;
 namespace TestProject1.ChekItemsCartEndpoint;
 
 [TestClass]
+[TestCategory("Basic")]
 public class CheckItemsEndpointTests : BaseTest
 {
 	[TestMethod]

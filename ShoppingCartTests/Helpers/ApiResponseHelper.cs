@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject1.Models.CartItemDto;
-using TestProject1.Models.StoreItemDto;
+using TestProject1.Models;
+using TestProject1.Constants;
 
 namespace TestProject1.Helpers;
 
@@ -75,6 +75,10 @@ public static class ApiResponseHelper
         var content = await response.Content.ReadAsStringAsync();
         Assert.AreEqual(expectedMessage, content.Trim(), "Unexpected error message returned from the API.");
     }
-
+    public static void AssertStoreItemsNotEmpty(List<StoreItemDto> items)
+    {
+        Assert.IsNotNull(items, "Expected store items list to be not null.");
+        Assert.IsTrue(items.Count > 0, "Expected non-empty list of store items.");
+    }
 
 }

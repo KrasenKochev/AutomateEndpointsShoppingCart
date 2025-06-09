@@ -1,4 +1,4 @@
-namespace TestProject1.Models.StoreItemDto;
+namespace TestProject1.Models;
 
 public class StoreItemDto
 {

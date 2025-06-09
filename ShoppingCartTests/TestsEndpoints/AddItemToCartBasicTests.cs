@@ -1,12 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestProject1.Constants;
 using TestProject1.Helpers;
-using TestProject1.Models.StoreItemDto;
+using TestProject1.Models;
 using TestProject1.TestData;
 
 namespace TestProject1.Tests
 {
     [TestClass]
+    [TestCategory("Basic")]
     public class AddItemToCartEndpointTests : BaseTest
     {
 

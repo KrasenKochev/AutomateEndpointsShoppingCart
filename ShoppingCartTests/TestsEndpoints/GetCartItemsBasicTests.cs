@@ -1,15 +1,17 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestProject1.Constants;
 using TestProject1.Helpers;
-using TestProject1.Models.StoreItemDto;
+using TestProject1.Models;
 using TestProject1.TestData;
 
 namespace TestProject1.Tests
 {
     [TestClass]
+    [TestCategory("Basic")]
     public class GetCartItemsEndpointTests : BaseTest
     {
         [TestMethod]
+
         public async Task GetCartItems_EmptyCart_ReturnsMessage()
         {
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
@@ -18,6 +20,7 @@ namespace TestProject1.Tests
         }
 
         [TestMethod]
+
         public async Task GetCartItems_SingleItem_ReturnsCorrectData()
         {
             var expectedItem = StoreItems.FirstItem;

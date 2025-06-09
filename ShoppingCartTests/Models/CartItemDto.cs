@@ -1,4 +1,4 @@
-namespace TestProject1.Models.CartItemDto;
+namespace TestProject1.Models;
 
 public class CartItemDto
 {
