@@ -1,8 +1,8 @@
-using TestProject1.Constants;
-using TestProject1.Models;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using TestProject1.Constants;
+using TestProject1.Models;
 
 namespace TestProject1.Helpers
 {
@@ -23,13 +23,17 @@ namespace TestProject1.Helpers
             return ApiResponseHelper.DeserializeCartItems(content);
         }
 
-        public static async Task CompleteOrderAsync(HttpClient client)
+        public static async Task<HttpResponseMessage> CompleteOrderAsync(HttpClient client)
         {
             var response = await client.PostAsync(Urls.COMPLETE_ORDER_PREFIX, null);
             ApiResponseHelper.AssertStatusCodeOk(response);
+            return response;
+
         }
-
-
+        public static async Task<HttpResponseMessage> RemoveItemFromCartAsync(HttpClient client, int itemId)
+        {
+            return await client.PostAsync(Urls.PostRemoveItemFromCartUrl(itemId.ToString()), null);
+        }
 
     }
 }

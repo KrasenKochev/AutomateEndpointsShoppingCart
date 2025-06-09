@@ -37,3 +37,5 @@ TestReport/
 # Secrets (if any, adjust accordingly)
 secrets.json
 
+
+.fake

@@ -29,11 +29,11 @@ namespace TestProject1.Scenarios
 
             var storeContent = await storeResponse.Content.ReadAsStringAsync();
             var storeItems = ApiResponseHelper.DeserializeStoreItems(storeContent);
-            ApiResponseHelper.AssertExpectedStoreItemCount(storeItems);
+            ApiResponseHelper.AssertStoreItemsLoaded(storeItems);
 
             var firstItem = StoreItems.FirstItem;
             var secondItem = StoreItems.SecondItem;
-            var firstQuantity = 2;
+            var firstQuantity = 1;
             var secondQuantity = 3;
 
 
@@ -55,8 +55,12 @@ namespace TestProject1.Scenarios
             ApiResponseHelper.AssertCartItemExists(cartItems1, secondItem, secondQuantity);
 
 
-            var removeFirstResponse = await _client.DeleteAsync(Urls.PostRemoveItemFromCartUrl(firstItem.Id.ToString()));
+            var removeFirstResponse = await CartHelper.RemoveItemFromCartAsync(_client, firstItem.Id);
             ApiResponseHelper.AssertStatusCodeOk(removeFirstResponse);
+
+            string expectedMessage = $"One quantity of item '{firstItem.Name}' removed from the cart. Item '{firstItem.Name}' completely removed.";
+            await ApiResponseHelper.AssertContentContainsMessage(removeFirstResponse, expectedMessage);
+
 
             var cartResponse2 = await _client.GetAsync(Urls.GET_CART_ITEMS);
             ApiResponseHelper.AssertStatusCodeOk(cartResponse2);
@@ -67,7 +71,7 @@ namespace TestProject1.Scenarios
             ApiResponseHelper.AssertCartItemDoesNotExist(cartItems2, firstItem.Id);
             ApiResponseHelper.AssertCartItemExists(cartItems2, secondItem, secondQuantity);
 
-            var completeOrderResponse = await _client.PostAsync(Urls.COMPLETE_ORDER_PREFIX, null);
+            var completeOrderResponse = await CartHelper.CompleteOrderAsync(_client);
             ApiResponseHelper.AssertStatusCodeOk(completeOrderResponse);
             ApiResponseHelper.AssertEmptyContent(completeOrderResponse);
         }
