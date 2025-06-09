@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestProject1.Constants;
 using TestProject1.Helpers;
-using TestProject1.Models.StoreItemDto;
+using TestProject1.Models;
 using TestProject1.TestData;
 
 namespace TestProject1.Tests
@@ -12,32 +12,34 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task RemoveItemFromCart_SingleQuantityItem_RemovesItemCompletely()
         {
-            var item = StoreItems.FirstItem;
-            await CartHelper.AddItemToCartAsync(_client, item.Id, 1);
+            var itemID = StoreItems.FirstItem.Id;
+            var quantity = 1;
 
-            var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(item.Id.ToString()), null);
-            ApiResponseHelper.AssertStatusCodeOk(response);
+            await CartHelper.AddItemToCartAsync(_client, itemID, quantity);
 
-            var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
-            var cartItems = ApiResponseHelper.DeserializeCartItems(await cartResponse.Content.ReadAsStringAsync());
+            await CartHelper.RemoveItemFromCartAsync(_client, itemID);
 
-            Assert.IsFalse(cartItems.Any(ci => ci.Id == item.Id));
+            var cartItems = await CartHelper.GetCartItemsAsync(_client);
+
+            Assert.IsFalse(cartItems.Any(ci => ci.Id == itemID));
         }
+
         [TestMethod]
         public async Task RemoveItemFromCart_MultipleQuantityItem_DecrementsQuantity()
         {
-            var item = StoreItems.FirstItem;
-            await CartHelper.AddItemToCartAsync(_client, item.Id, 3);
+            var itemId = StoreItems.FirstItem.Id;
+            var quantity = 3;
+            var actualQuantity = quantity - 1;
 
-            var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(item.Id.ToString()), null);
-            ApiResponseHelper.AssertStatusCodeOk(response);
+            await CartHelper.AddItemToCartAsync(_client, itemId, quantity);
+            await CartHelper.RemoveItemFromCartAsync(_client, itemId);
 
-            var cartItems = ApiResponseHelper.DeserializeCartItems(await (await _client.GetAsync(Urls.GET_CART_ITEMS)).Content.ReadAsStringAsync());
-            var actualItem = cartItems.FirstOrDefault(ci => ci.Id == item.Id);
+            var actualItem = await CartHelper.GetCartItemAsync(_client, itemId);
 
             Assert.IsNotNull(actualItem);
-            Assert.AreEqual(2, actualItem.Quantity);
+            Assert.AreEqual(actualQuantity, actualItem.Quantity);
         }
+
 
         [TestMethod]
         public async Task RemoveItemFromCart_ItemNotInCart_ReturnsBadRequest()

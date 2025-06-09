@@ -1,7 +1,7 @@
 namespace TestProject1.TestData;
 
-using TestProject1.Models.StoreItemDto;
-using TestProject1.Models.CartItemDto;
+using TestProject1.Models;
+
 public static class StoreItems
 {
     public static StoreItemDto FirstItem => new()

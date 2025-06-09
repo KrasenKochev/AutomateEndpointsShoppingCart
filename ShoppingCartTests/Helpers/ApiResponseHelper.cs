@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject1.Models.CartItemDto;
-using TestProject1.Models.StoreItemDto;
+using TestProject1.Models;
 
 namespace TestProject1.Helpers;
 
