@@ -9,10 +9,10 @@ namespace TestProject1.Helpers
 
     public static class CartHelper
     {
-        public static async Task AddItemToCartAsync(HttpClient client, int itemId, int quantity)
+        public static async Task<HttpResponseMessage> AddItemToCartAsync(HttpClient client, int itemId, int quantity)
         {
             var url = Urls.PostAddItemToCartUrl(itemId.ToString(), quantity.ToString());
-            await client.PostAsync(url, new StringContent(""));
+            return await client.PostAsync(url, null);
         }
         public static async Task<List<CartItemDto>> GetCartItemsAsync(HttpClient client)
         {

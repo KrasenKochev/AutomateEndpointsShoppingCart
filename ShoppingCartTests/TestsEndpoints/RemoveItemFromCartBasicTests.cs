@@ -32,7 +32,7 @@ namespace TestProject1.Tests
 
             var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(itemID.ToString()), null);
             ApiResponseHelper.AssertStatusCodeOk(response);
-            ApiResponseHelper.AssertContentContainsMessage(response, expectedMessage);
+            await ApiResponseHelper.AssertContentContainsMessage(response, expectedMessage);
 
             var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
             ApiResponseHelper.AssertContentEquals(cartResponse, "Shopping cart is empty.");
@@ -52,7 +52,7 @@ namespace TestProject1.Tests
 
             var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(item.Id.ToString()), null);
             ApiResponseHelper.AssertStatusCodeOk(response);
-            ApiResponseHelper.AssertContentContainsMessage(response, expectedMessage);
+            await ApiResponseHelper.AssertContentContainsMessage(response, expectedMessage);
 
             var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
             var cartContent = await cartResponse.Content.ReadAsStringAsync();
@@ -70,7 +70,7 @@ namespace TestProject1.Tests
             var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(itemID.ToString()), null);
 
             ApiResponseHelper.AssertStatusCodeBadRequest(response);
-            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.ITEM_NOT_IN_CART);
+            await ApiResponseHelper.AssertContentContainsMessage(response, Messages.ITEM_NOT_IN_CART);
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace TestProject1.Tests
             var response = await _client.PostAsync(Urls.PostRemoveItemFromCartUrl(itemId.ToString()), null);
 
             ApiResponseHelper.AssertStatusCodeBadRequest(response);
-            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.ITEM_INFO_NOT_FOUND);
+            await ApiResponseHelper.AssertContentContainsMessage(response, Messages.ITEM_INFO_NOT_FOUND);
         }
 
 

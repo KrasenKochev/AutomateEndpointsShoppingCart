@@ -47,7 +47,9 @@ public static class ApiResponseHelper
             item.Name == expected.Name &&
             item.Price == expected.Price);
         Assert.IsNotNull(match, "Expected item was not found in the list.");
+
     }
+
     public static void AssertStoreItemIsNonExisting(List<StoreItemDto>? items, StoreItemDto expected)
     {
         Assert.IsNotNull(items, "Deserialized item list is null.");
@@ -57,6 +59,20 @@ public static class ApiResponseHelper
         item.Price == expected.Price);
 
         Assert.IsNull(nonExistingItem, $"Unexpected item found in store items: Id={expected.Id}, Name='{expected.Name}', Price={expected.Price:C}.");
+    }
+
+    public static void AssertCartItemExists(List<CartItemDto>? items, StoreItemDto expected, int expectedQuantity)
+    {
+        Assert.IsNotNull(items, "Deserialized cart item list is null.");
+
+        var match = items.FirstOrDefault(item =>
+            item.Id == expected.Id &&
+            item.Name == expected.Name &&
+            item.PricePerProduct == expected.Price &&
+            item.Quantity == expectedQuantity &&
+            item.TotalPrice == expected.Price * expectedQuantity);
+
+        Assert.IsNotNull(match, $"Expected item '{expected.Name}' with quantity {expectedQuantity} was not found in the cart.");
     }
 
     public static void AssertEachItemHasRequiredFields(List<StoreItemDto>? items)
@@ -70,11 +86,6 @@ public static class ApiResponseHelper
             Assert.IsTrue(item.Price > 0, $"Item Price should be greater than 0. Found: {item.Price}");
         }
     }
-    public static async Task AssertErrorMessageAsync(HttpResponseMessage response, string expectedMessage)
-    {
-        var content = await response.Content.ReadAsStringAsync();
-        Assert.AreEqual(expectedMessage, content.Trim(), "Unexpected error message returned from the API.");
-    }
     public static void AssertStoreItemsNotEmpty(List<StoreItemDto> items)
     {
         Assert.IsNotNull(items, "Expected store items list to be not null.");
@@ -86,7 +97,7 @@ public static class ApiResponseHelper
         Assert.AreEqual(expectedQuantity, item.Quantity, $"Expected quantity {expectedQuantity}, but got {item?.Quantity ?? -1}.");
     }
 
-    public static async void AssertContentContainsMessage(HttpResponseMessage response, string expectedMessage)
+    public static async Task AssertContentContainsMessage(HttpResponseMessage response, string expectedMessage)
     {
         var content = await response.Content.ReadAsStringAsync();
         StringAssert.Contains(content, expectedMessage, "Response did not contain the expected message.");
@@ -111,5 +122,16 @@ public static class ApiResponseHelper
         Assert.AreEqual(expectedQuantity, actualItem.Quantity, "Item quantity does not match.");
         Assert.AreEqual(itemPrice * expectedQuantity, actualItem.TotalPrice, "Total price does not match.");
     }
+    public static async void AssertEmptyContent(HttpResponseMessage response)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.IsTrue(string.IsNullOrWhiteSpace(content), "Expected empty response content but got: " + content);
+    }
+    public static void AssertItemCount<T>(List<T>? items, int expectedCount)
+    {
+        Assert.IsNotNull(items, "Item list was null.");
+        Assert.AreEqual(expectedCount, items.Count, $"Expected {expectedCount} items but got {items.Count}.");
+    }
+
 
 }

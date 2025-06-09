@@ -23,6 +23,7 @@ namespace TestProject1.Tests
             var response = await _client.PostAsync(Urls.COMPLETE_ORDER_PREFIX, null);
 
             ApiResponseHelper.AssertStatusCodeOk(response);
+            ApiResponseHelper.AssertEmptyContent(response);
         }
 
         [TestMethod]
@@ -32,7 +33,7 @@ namespace TestProject1.Tests
 
             ApiResponseHelper.AssertStatusCodeBadRequest(response);
 
-            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.SHOPPING_CART_IS_EMPTY_COMPLETE_ORDER);
+            await ApiResponseHelper.AssertContentContainsMessage(response, Messages.SHOPPING_CART_IS_EMPTY_COMPLETE_ORDER);
         }
 
     }

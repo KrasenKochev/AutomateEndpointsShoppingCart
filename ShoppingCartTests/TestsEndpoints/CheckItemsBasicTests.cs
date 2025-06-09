@@ -52,7 +52,7 @@ public class CheckItemsEndpointTests : BaseTest
 		var items = ApiResponseHelper.DeserializeStoreItems(content);
 
 		ApiResponseHelper.AssertStatusCodeOk(response);
-		Assert.AreEqual(10, items?.Count);
+		ApiResponseHelper.AssertItemCount(items, expectedCount: 10);
 	}
 
 	[TestMethod]

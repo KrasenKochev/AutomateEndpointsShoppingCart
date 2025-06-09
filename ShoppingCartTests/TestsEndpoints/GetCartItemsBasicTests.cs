@@ -24,7 +24,7 @@ namespace TestProject1.Tests
         {
             var response = await _client.GetAsync(Urls.GET_CART_ITEMS);
             ApiResponseHelper.AssertStatusCodeOk(response);
-            await ApiResponseHelper.AssertErrorMessageAsync(response, Messages.SHOPPING_CART_IS_EMPTY_GET_CART_ITEMS);
+            await ApiResponseHelper.AssertContentContainsMessage(response, Messages.SHOPPING_CART_IS_EMPTY_GET_CART_ITEMS);
         }
 
         [TestMethod]

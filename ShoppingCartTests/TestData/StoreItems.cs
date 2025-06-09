@@ -4,6 +4,7 @@ namespace TestProject1.TestData;
 
 public static class StoreItems
 {
+
     public static StoreItemDto FirstItem => new()
     {
         Id = 1,
