@@ -48,6 +48,11 @@ Two new endpoints were added and tested as part of this project:
 
 ## Running the Tests
 
+You can also start listening on: http://localhost:4080 so that you can test the endpoints using api calls and test the program ( with Postman for instance),
+by typing in the terminal:
+
+dotnet run --urls http://localhost:4080
+
 To run all tests:
 
 1. Open a terminal in the `ShoppingCartTests` directory.
@@ -57,9 +62,6 @@ To run all tests:
 dotnet test
 
 To run tests by categories:
-
-1. Open a terminal in the `ShoppingCartTests` directory.
-2. Run one the following command:
 
 ```bash
 dotnet test --filter TestCategory=Basic
@@ -72,8 +74,10 @@ dotnet test --logger "trx"
 
 ToDo:
 
--Refactor helper classes and test setup to improve encapsulation and abstraction. Unify the overall style of tests, assertions and methods used.Also to consolidate the helper functions and models to use strings/int. Check on the access modifiers, if needed.
+-Refactor helper classes and test setup to improve encapsulation and abstraction. Unify the overall style of tests, assertions and methods used.
+ Also to consolidate the helper functions and models to use strings/int. Check on the access modifiers, if needed.
 -Expand scenario tests to cover more edge cases and user interactions like removing partial quantities, using negative quantities, volume/performance, and other.
 -Implement more convinient report viewing/generating tool
+
 
 ````
