@@ -15,7 +15,7 @@ namespace TestProject1.Tests
         [TestMethod]
         public async Task CompleteOrder_ItemsInCart_ReturnsOk()
         {
-            var addToCartUrl = Urls.PostAddItemToCartUrl(ItemsProperties.StoreItemId, ItemsProperties.StoreItemQuantity);
+            var addToCartUrl = Urls.PostAddItemToCartUrl(ItemsProperties.StoreItemId, ItemsProperties.StoreItemQuantity.ToString());
             var AddItemToCartResponse = await _client.PostAsync(addToCartUrl, null);
 
             ApiResponseHelper.AssertStatusCodeOk(AddItemToCartResponse);

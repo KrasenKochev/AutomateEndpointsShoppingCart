@@ -24,7 +24,7 @@ namespace TestProject1.Tests
         public async Task RemoveItemFromCart_SingleQuantityItem_RemovesItemCompletely()
         {
             var itemID = StoreItems.FirstItem.Id;
-            var quantity = 1;
+            var quantity = ItemsProperties.StoreItemQuantity;
             var itemName = StoreItems.FirstItem.Name;
             var expectedMessage = $"One quantity of item '{itemName}' removed from the cart. Item '{itemName}' completely removed.";
 

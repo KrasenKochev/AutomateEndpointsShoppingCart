@@ -24,7 +24,7 @@ namespace TestProject1.Tests
         public async Task AddItemToCart_WithValidItemAndQuantity_ReturnsOk()
         {
             var item = StoreItems.FirstItem;
-            var quantity = 1;
+            var quantity = ItemsProperties.StoreItemQuantity;
 
             var addResponse = await CartHelper.AddItemToCartAsync(_client, item.Id, quantity);
             ApiResponseHelper.AssertStatusCodeOk(addResponse);
@@ -42,7 +42,7 @@ namespace TestProject1.Tests
         public async Task AddItemToCart_WithNonExistingId_ReturnsBadRequest()
         {
             var item = StoreItems.NonExistingItem;
-            var quantity = 1;
+            var quantity = ItemsProperties.StoreItemQuantity;
 
             var addResponse = await CartHelper.AddItemToCartAsync(_client, item.Id, quantity);
             ApiResponseHelper.AssertStatusCodeBadRequest(addResponse);
@@ -83,7 +83,7 @@ namespace TestProject1.Tests
         public async Task AddItemToCart_WithStringId_ReturnsNonFound()
         {
 
-            var StoreItemIdString = "errror&";
+            var StoreItemIdString = ItemsProperties.StoreItemIdInvalidSymbol;
             var Quantity = "1";
 
             var url = Urls.PostAddItemToCartUrl(StoreItemIdString, Quantity);
@@ -92,14 +92,14 @@ namespace TestProject1.Tests
             ApiResponseHelper.AssertStatusCodeNotFound(response);
 
             var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
-            ApiResponseHelper.AssertContentEquals(cartResponse, "Shopping cart is empty.");
+            ApiResponseHelper.AssertContentEquals(cartResponse, Messages.SHOPPING_CART_IS_EMPTY_GET_CART_ITEMS);
         }
 
         [TestMethod]
         public async Task AddItemToCart_WithValidItemAndLargeQuantity_ReturnsNonFound()
         {
             var StoreItemId = StoreItems.SecondItem.Id;
-            var Quantity = "9999999999";
+            var Quantity = ItemsProperties.StoreItemQuantityLarge;
 
             var url = Urls.PostAddItemToCartUrl(StoreItemId.ToString(), Quantity);
             var response = await _client.PostAsync(url, null);
@@ -107,13 +107,13 @@ namespace TestProject1.Tests
             ApiResponseHelper.AssertStatusCodeNotFound(response);
 
             var cartResponse = await _client.GetAsync(Urls.GET_CART_ITEMS);
-            ApiResponseHelper.AssertContentEquals(cartResponse, "Shopping cart is empty.");
+            ApiResponseHelper.AssertContentEquals(cartResponse, Messages.SHOPPING_CART_IS_EMPTY_GET_CART_ITEMS);
         }
 
         /*
         AddItemToCart_WithValidItemAndLargeQuantity_ReturnsNonFound :
 
-        Take note that when adding item with large quantity(int) multiple times, the quantity of the cart goes into negative.
+        Take note that when adding item with large quantity(int) multiple times, the quantity of the item in the cart goes into negative.
         */
 
 
